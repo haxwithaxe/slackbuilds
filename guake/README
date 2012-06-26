@@ -1,0 +1,9 @@
+guake
+
+patches for window dimension modifications included:
+window-dimensions.patch: give control over window width and vertical offset (eventually via the preferences gui in additin to gconf)
+
+TODO:
+ - patch to remove gconf dependency
+ - add support for additional configs in the preferences gui
+

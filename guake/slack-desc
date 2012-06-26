@@ -5,15 +5,18 @@
 # make exactly 11 lines for the formatting to be correct.  It's also
 # customary to leave one space after the ':' except on otherwise blank lines.
 
-       |-----handy-ruler------------------------------------------------------|
-appname: appname (short description of app)
-appname:
-appname: Long description of appname, wrapped at 71 characters *after* the
-appname: colon following "appname" (and the 'handy ruler' should start at
-appname: that colon and be exactly 71 characters long).
-appname: If there is room, there might be a link to the homepage of the
-appname: application on one of these lines, but it's not necessary.
-appname:
-appname: The maximum number of lines prefixed by "appname:" is 11.
-appname: Lines without any other text should *not* have a space after the :
-appname:
+     |-----handy-ruler------------------------------------------------------|
+guake: guake (quake style drop down terminal)
+guake:
+guake: Guake is a dropdown terminal made for the GNOME desktop environment.
+guake: Its style of window is based on an fps games, and one of its goals is
+guake: be easy to reach. Guake is written mostly in python and has a little
+guake: piece in C (global hotkey stuff).
+guake:
+guake: Features/Bugs/Information: http://guake.org/
+guake: 
+guake: Licence: GPLv2 (or later if wanted. see README.guake for details)
+guake:
+guake: depends on: gnome-python (or pygobject+pygtk+python-gconf but gnome-python is available at slackbuilds.org)
+#guake: The maximum number of lines prefixed by "guake:" is 11.
+#guake: Lines without any other text should *not* have a space after the :
