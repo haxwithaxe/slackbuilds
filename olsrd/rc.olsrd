@@ -66,14 +66,20 @@ case "$1" in
 	echo $(pidof $NAME) > $PID_FILE
 	;;
   stop-soft)
-	pidof $NAME || echo "None running" && exit 0
+	if [[ $(pidof $NAME) -eq 0 ]] ; then 
+		echo "$NAME is not running."
+		exit 0
+	fi
 	echo -n "Stopping $DESC: "
 	kill -1 $(pidof $NAME)
         rm -f $PID_FILE
 	echo "$NAME."
 	;;
   stop)
-	pidof $NAME || echo "None running" && exit 0
+	if [[ $(pidof $NAME) -eq 0 ]] ; then 
+		echo "$NAME is not running."
+		exit 0
+	fi
 	echo -n "Stopping $DESC: "
 	kill -9 $(pidof $NAME)
         rm -f $PID_FILE
