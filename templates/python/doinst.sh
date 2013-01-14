@@ -29,26 +29,25 @@ schema_install() {
     /etc/gconf/schemas/$SCHEMA \
     1>/dev/null
 }
+%comment-schema-install%schema_install blah.schemas
+%comment-init-install%preserve_perms etc/rc.d/rc.INIT.new
+%comment-etc-install%config etc/configfile.new
 
-schema_install blah.schemas
-preserve_perms etc/rc.d/rc.INIT.new
-config etc/configfile.new
+%comment-desktopfile-update%if [ -x /usr/bin/update-desktop-database ]; then
+%comment-desktopfile-update%	/usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
+%comment-desktopfile-update%fi
 
-if [ -x /usr/bin/update-desktop-database ]; then
-  /usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
-fi
+%comment-mimedb-update%if [ -x /usr/bin/update-mime-database ]; then
+%comment-mimedb-update%  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
+%comment-mimedb-update%fi
 
-if [ -x /usr/bin/update-mime-database ]; then
-  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
-fi
+%comment-icon-update%if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
+%comment-icon-update%  if [ -x /usr/bin/gtk-update-icon-cache ]; then
+%comment-icon-update%    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
+%comment-icon-update%  fi
+%comment-icon-update%fi
 
-if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
-  if [ -x /usr/bin/gtk-update-icon-cache ]; then
-    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
-  fi
-fi
-
-if [ -x /usr/bin/glib-compile-schemas ]; then
-  /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas/
-fi
+%comment-glib-schema-update%if [ -x /usr/bin/glib-compile-schemas ]; then
+%comment-glib-schema-update%  /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas/
+%comment-glib-schema-update%fi
 
