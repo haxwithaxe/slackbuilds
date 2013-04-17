@@ -56,8 +56,8 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP || exit 1
 rm -rf $PRGNAM-$VERSION
 #tar xvf $CWD/$PRGNAM-$VERSION.tar.gz || exit 1
-cp -r $CWD/$PRGNAM/$PRGNAM $TMP/$PRGNAM-$VERSION
-cd $PRGNAM-$VERSION || exit 1
+cp -r $CWD/$PRGNAM $TMP/$PRGNAM-$VERSION
+cd $TMP/$PRGNAM-$VERSION || exit 1
 chown -R root:root .
 chmod -R u+w,go+r-w,a-s .
 

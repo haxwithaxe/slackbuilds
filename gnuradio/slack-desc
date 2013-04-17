@@ -1,0 +1,21 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+        |-----handy-ruler------------------------------------------------------|
+gnuradio: gnuradio (free software development toolkit)
+gnuradio:
+gnuradio: requires: boost>=1.5.3, cppunit, fftw3f, swig, numpy, Cheetah, pygtk,
+gnuradio: gsl
+gnuradio: Please see http://gnuradio.org for the wiki, bug tracking, and source
+gnuradio: code viewer.
+gnuradio: If you've got questions about GNU Radio, please subscribe to the
+gnuradio: discuss-gnuradio mailing list and post your questions there.
+gnuradio: http://gnuradio.org/redmine/projects/gnuradio/wiki/MailingLists
+gnuradio: There is also a "Build Guide" in the wiki that contains OS specific
+gnuradio: recommendations:
+gnuradio: http://gnuradio.org/redmine/projects/gnuradio/wiki/BuildGuide
+gnuradio:

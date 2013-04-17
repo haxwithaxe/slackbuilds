@@ -1,0 +1,17 @@
+@git
+@cmake
+-boost
+@cppunit
+@fftw3f
+@swig
+@numpy
+@doxygen
+@Cheetah
+@pygtk
+@gsl
+-qt
+-qwt
+-pyqt
+-pyqwt
+@wxpython
+@python-lxml

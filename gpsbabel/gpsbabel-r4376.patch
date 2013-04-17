@@ -1,0 +1,120 @@
+diff -rupN gpsbabel/gpsbabel.old/gbfile.cc gpsbabel/gpsbabel.new/gbfile.cc
+--- gpsbabel/gpsbabel.old/gbfile.cc	2013-04-17 11:25:03.753249855 -0400
++++ gpsbabel/gpsbabel.new/gbfile.cc	2013-04-17 11:10:31.292157120 -0400
+@@ -85,9 +85,9 @@ gzapi_open(gbfile* self, const char* mod
+       fd = stdout;
+     }
+     SET_BINARY_MODE(fd);
+-    self->handle.gz = (void**)gzdopen(fileno(fd), openmode);
++    self->handle.gz = (gzFile_s**)gzdopen(fileno(fd), openmode);
+   } else {
+-    self->handle.gz = (void**)gzopen(self->name, openmode);
++    self->handle.gz = (gzFile_s**)gzopen(self->name, openmode);
+   }
+ 
+   if (self->handle.gz == NULL) {
+@@ -103,7 +103,7 @@ gzapi_open(gbfile* self, const char* mod
+ static int
+ gzapi_close(gbfile* self)
+ {
+-  return gzclose(self->handle.gz);
++  return gzclose((gzFile)self->handle.gz);
+ }
+ 
+ static int
+@@ -116,7 +116,7 @@ gzapi_seek(gbfile* self, gbint32 offset,
+   if ((whence == SEEK_CUR) && (self->back != -1)) {
+     offset--;
+   }
+-  result = gzseek(self->handle.gz, offset, whence);
++  result = gzseek((gzFile)self->handle.gz, offset, whence);
+   self->back = -1;
+ 
+   if (result < 0) {
+@@ -141,7 +141,7 @@ gzapi_read(void* buf, const gbsize_t siz
+     result++;
+     self->back = -1;
+   }
+-  result += gzread(self->handle.gz, target, count);
++  result += gzread((gzFile)self->handle.gz, target, count);
+ 
+   /* Check for an incomplete READ */
+   if ((members == 1) && (size > 1) && (result > 0) && (result < (int)size)) {
+@@ -154,10 +154,10 @@ gzapi_read(void* buf, const gbsize_t siz
+     int errnum;
+     const char* errtxt;
+ 
+-    errtxt = gzerror(self->handle.gz, &errnum);
++    errtxt = gzerror((gzFile)self->handle.gz, &errnum);
+ 
+     /* Workaround for zlib bug: buffer error on empty files */
+-    if ((errnum == Z_BUF_ERROR) && (gztell(self->handle.gz) == 0)) {
++    if ((errnum == Z_BUF_ERROR) && (gztell((gzFile)self->handle.gz) == 0)) {
+       return (gbsize_t) 0;
+     }
+     if ((errnum != Z_STREAM_END) && (errnum != 0))
+@@ -170,13 +170,13 @@ gzapi_read(void* buf, const gbsize_t siz
+ static gbsize_t
+ gzapi_write(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
+ {
+-  return gzwrite(self->handle.gz, buf, size * members) / size;
++  return gzwrite((gzFile)self->handle.gz, buf, size * members) / size;
+ }
+ 
+ static int
+ gzapi_flush(gbfile* self)
+ {
+-  return gzflush(self->handle.gz, Z_SYNC_FLUSH);
++  return gzflush((gzFile)self->handle.gz, Z_SYNC_FLUSH);
+ }
+ 
+ static gbsize_t
+@@ -184,7 +184,7 @@ gzapi_tell(gbfile* self)
+ {
+   gbsize_t result;
+ 
+-  result = gztell(self->handle.gz);
++  result = gztell((gzFile)self->handle.gz);
+   if (self->back != -1) {
+     result--;
+   }
+@@ -201,10 +201,10 @@ gzapi_eof(gbfile* self)
+     return res;
+   }
+ 
+-  res  = gzeof(self->handle.gz);
++  res  = gzeof((gzFile)self->handle.gz);
+   if (!res) {
+     unsigned char test;
+-    int len = gzread(self->handle.gz, &test, 1);
++    int len = gzread((gzFile)self->handle.gz, &test, 1);
+     if (len == 1) {
+       /* No EOF, put the single byte back into stream */
+       self->back = test;
+@@ -212,7 +212,7 @@ gzapi_eof(gbfile* self)
+       /* we are at the end of the file */
+       if (global_opts.debug_level > 0) {
+         /* now gzeof() should return 1 */
+-        is_fatal(!gzeof(self->handle.gz), "zlib gzeof error!\n");
++        is_fatal(!gzeof((gzFile)self->handle.gz), "zlib gzeof error!\n");
+       }
+       res = 1;
+     }
+@@ -234,7 +234,7 @@ gzapi_ungetc(const int c, gbfile* self)
+ static void
+ gzapi_clearerr(gbfile* self)
+ {
+-  gzclearerr(self->handle.gz);
++  gzclearerr((gzFile)self->handle.gz);
+ }
+ 
+ static int
+@@ -242,7 +242,7 @@ gzapi_error(gbfile* self)
+ {
+   int errnum;
+ 
+-  (void)gzerror(self->handle.gz, &errnum);
++  (void)gzerror((gzFile)self->handle.gz, &errnum);
+ 
+   return errnum;
+ }
