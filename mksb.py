@@ -65,7 +65,7 @@ def parse_args():
 	argp.add_argument('--page', dest='home_page', required=False, default=None)
 	argp.add_argument('--author', dest='your_name', required=False, default='N/A')
 	argp.add_argument('--mail', dest='your_mail', required=False, default='N/A')
-	argp.add_argument('--type', dest='build_type', required=False, default='autotools', choices=['autotools', 'cmake', 'perl', 'python', 'rubygem']) #eventually binary as well
+	argp.add_argument('--type', dest='build_type', required=False, default='autotools', choices=['autotools', 'qmake', 'cmake', 'perl', 'python', 'rubygem','make','manual'])
 	argp.add_argument('--srctype', dest='src_type', required=False, default='local', choices=['local', 'url', 'repo', 'git', 'svn', 'hg'])
 	export_vals(vars(argp.parse_args(args)))
 
