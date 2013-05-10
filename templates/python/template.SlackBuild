@@ -44,7 +44,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+%untar-command% #tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -53,8 +53,9 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
+### Build and Install to Pkg root ###
 # Your application may need different options; this is only an example 
-python setup.py install --root=$PKG
+pip install --target $PKG $PRGNAM
 
 # Strip binaries and libraries.
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
@@ -63,17 +64,17 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 # Compress man pages
 # If the man pages are installed to /usr/share/man instead, you'll need to 
 # move them manually.
-find $PKG/usr/man -type f -exec gzip -9 {} \;
-for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+%man-pages-comment%find $PKG/usr/man -type f -exec gzip -9 {} \;
+%man-pages-comment%for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
 # Copy program documentation into the package
 # The included documentation varies from one application to another, so be sure
 # to adjust your script as needed
 # Also, include the SlackBuild script in the documentation directory
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a \
-  <documentation> \
-  $PKG/usr/doc/$PRGNAM-$VERSION
+%copy-docs-comment%cp -a \
+%copy-docs-comment%	%documentation% \
+%copy-docs-comment%  $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # Copy the slack-desc (and a custom doinst.sh if necessary) into ./install
