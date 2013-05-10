@@ -1,0 +1,3 @@
+[submodule "fldigi/fldigi"]
+	path = fldigi/fldigi
+	url = git://git.berlios.de/fldigi
