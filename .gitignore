@@ -8,4 +8,6 @@ rtl-sdr/rtl-sdr-git.tar.gz
 rtl-sdr/rtl-sdr-git/
 tilda-cvs/tilda-cvs.tar.gz
 tilda-cvs/tilda/
-
+olsrd/olsrd*.tar.bz2
+test.py
+testing
