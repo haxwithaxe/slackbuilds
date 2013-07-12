@@ -2,13 +2,14 @@
 
 # Slackware build script for <retroshare>
 
-# Written by (your name) (your contact information)
+# Written by () ()
 
 PRGNAM=retroshare
 VERSION=${VERSION:-svn}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 CORES=${CORES:-2}
+$MODE=${MODE:-} #use gui or nogui to select one but not the other
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -58,17 +59,67 @@ find . \
 
 
 # Compile the application and install it into the $PKG directory
-# for no gui version ( rsctrl retroshare-nogui )
-for d in ( libbitdht openpgpsdk libretroshare retroshare-gui ) ;do
-	cd $d/src
-	qmake
-	make clean
-	make -j$CORES
-	cd ../..
-done
+build_gui(){
+	for d in libbitdht openpgpsdk libretroshare retroshare-gui ;do
+		cd $d/src
+		qmake
+		make clean
+		make -j$CORES
+		cd ../..
+	done
+}
 
-mkdir $PKG/opt/$PRGNAM
-cp -a $TMP/$PRGNAM-$VERSION/* $PKG/opt/$PRGNAM/
+build_nogui(){
+	cd rsctrl/src
+	make -j$CORES
+	cd -
+	cd retroshare-nogui/src
+	qmake && make clean && make -j$CORES
+	cd -
+}
+
+build_all(){
+	build_gui
+	build_nogui
+}
+
+# "install" retroshare from svn
+install_any(){
+	mkdir -p $PKG/opt/$PRGNAM
+	cp -a $TMP/$PRGNAM-$VERSION/* $PKG/opt/$PRGNAM/
+	mkdir -p $PKG/usr/bin
+}
+
+install_gui(){
+	ln -s /opt/$PRGNAM/retroshare-gui/src/RetroShare $PKG/usr/bin/retroshare-gui
+}
+
+install_nogui(){
+	ln -s /opt/$PRGNAM/retroshare-nogui/src/retroshare-nogui $PKG/usr/bin/retroshare-nogui
+}
+
+install_all(){
+	install_gui
+	install_nogui
+}
+
+case "$MODE" in
+    "gui")
+        build_gui
+        install_gui
+        MODE="-$MODE"
+        ;;
+    "nogui")
+        build_nogui
+        install_nogui
+        MODE="-$MODE"
+        ;;
+    *)
+        build_all
+        install_all
+        MODE=""
+        ;;
+esac
 
 # Copy program documentation into the package
 # The included documentation varies from one application to another, so be sure
@@ -87,4 +138,4 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 # your custom contents of doinst.sh runs, then add the -p switch to
 # the makepkg command below -- see makepkg(8) for details
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM$MODE-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
