@@ -1,0 +1,12 @@
+diff -rupN pianobar-old/Makefile pianobar-new/Makefile
+--- pianobar-old/Makefile	2013-06-12 01:07:20.852752643 -0400
++++ pianobar-new/Makefile	2013-06-12 01:08:03.635217789 -0400
+@@ -18,7 +18,7 @@ ifeq (${CC},cc)
+ 	else ifeq (${OS},FreeBSD)
+ 		CC=cc -std=c99
+ 	else
+-		CC=c99
++		CC=gcc -std=c99
+ 	endif
+ endif
+ 

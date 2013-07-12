@@ -4,7 +4,7 @@
 # Written by Phillip Warner <pc_warner@yahoo.com>
 
 PRGNAM=${PRGNAM:-pianobar}
-VERSION=${VERSION:-2012.04.24}
+VERSION=${VERSION:-git}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_hax}
 
@@ -37,11 +37,18 @@ fi
 
 set -e
 
+CWD_LAST=`pwd`
+cd $CWD/$PRGNAM
+git clean -dxf
+git pull
+cd $CWD_LAST
+
 rm -rf $PKG
 mkdir -p $TMP $PKG/usr $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.?z*
+#tar xvf $CWD/$PRGNAM-$VERSION.tar.?z*
+cp -a $CWD/$PRGNAM $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -50,9 +57,9 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-# Fix Makefile
-patch -p1 < $CWD/Makefile.diff
+patch -p1 < $CWD/c99.patch
 
+gmake clean
 CFLAGS="$SLKCFLAGS" \
 force_arch="$ARCH" \
 gmake DISABLE_FAAD=1

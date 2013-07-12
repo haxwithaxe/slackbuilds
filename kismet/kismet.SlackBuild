@@ -6,9 +6,9 @@
 # Modified by Antonio Hernández Blas <hba.nihilismus@gmail.com>
 
 PRGNAM=kismet
-VERSION=${VERSION:-2011_03_R2}
+VERSION=${VERSION:-git}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
+TAG=${TAG:-_hax}
 
 SRCVERSION=$(echo $VERSION | tr _ -)
 
@@ -56,8 +56,8 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
 
-tar xvf $CWD/$PRGNAM-$SRCVERSION.tar.gz
-mv $PRGNAM-$SRCVERSION $PRGNAM-$VERSION
+#tar xvf $CWD/$PRGNAM-$SRCVERSION.tar.gz
+cp -a $CWD/$PRGNAM $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 
 chown -R root:root .
@@ -89,7 +89,7 @@ find $PKG/usr/man -type f -exec gzip -9 {} \;
 for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a CHANGELOG GPL README *.txt docs/* patches/ $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a CHANGELOG README *.txt docs/* patches/ $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
