@@ -47,8 +47,8 @@ rm -rf $PKG
 mkdir -p $TMP $PKG/usr $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-#tar xvf $CWD/$PRGNAM-$VERSION.tar.?z*
-cp -a $CWD/$PRGNAM $PRGNAM-$VERSION
+. $CWD/update.sh `pwd`
+cp -r $CWD/$PRGNAM-$VERSION $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -62,7 +62,7 @@ patch -p1 < $CWD/c99.patch
 gmake clean
 CFLAGS="$SLKCFLAGS" \
 force_arch="$ARCH" \
-gmake DISABLE_FAAD=1
+gmake #DISABLE_FAAD=1
 
 gmake install DESTDIR=$PKG PREFIX="/usr" MANDIR="/usr/man"
 

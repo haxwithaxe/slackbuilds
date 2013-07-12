@@ -63,10 +63,10 @@ chmod -R u+w,go+r-w,a-s .
 
 # Starting with glib 2.32 it is now mandatory to
 # include glib.h instead of individual headers.
-patch -p1 -i $CWD/glib-single-include.patch
+#patch -p1 -i $CWD/glib-single-include.patch
 
 # prevent tilda from grabbing alt
-patch -p1 -i $CWD/no_alt_grab.patch
+#patch -p1 -i $CWD/no_alt_grab.patch
 
 ./autogen.sh
 

@@ -29,3 +29,5 @@ schema_install() {
     /etc/gconf/schemas/$SCHEMA \
     1>/dev/null
 }
+
+ldconfig

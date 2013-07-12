@@ -1,17 +1,17 @@
-@git
-@cmake
+-git
+-cmake
 -boost
-@cppunit
-@fftw3f
-@swig
-@numpy
-@doxygen
-@Cheetah
-@pygtk
-@gsl
+-fftw3f #byo
+-swig
+-doxygen
+-Cheetah #pip
+-pygtk
 -qt
--qwt
 -pyqt
 -pyqwt
-@wxpython
-@python-lxml
+wxPython
+lxml
+@cppunit
+@numpy
+@gsl
+-qwt

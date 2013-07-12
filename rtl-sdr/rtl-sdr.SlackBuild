@@ -38,13 +38,17 @@ else
   LIBDIRSUFFIX=""
 fi
 
+cd $CWD/$PRGNAM
+git pull
+cd -
+
 set -e # Exit on most errors
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cp -r $CWD/$PRGNAM $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -83,6 +87,8 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 # If no info pages are installed by the software, don't leave this in the script
 rm -f $PKG/usr/info/dir
 #gzip -9 $PKG/usr/info/*.info*
+
+cp rtl-sdr.rules $PKG/etc/udev/rules.d/
 
 # Remove perllocal.pod and other special files that don't need to be installed,
 # as they will overwrite what's already on the system.  If this is not needed,
