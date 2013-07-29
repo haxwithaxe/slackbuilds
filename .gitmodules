@@ -4,3 +4,18 @@
 [submodule "gnuradio/gnuradio"]
 	path = gnuradio/gnuradio
 	url = http://gnuradio.org/git/gnuradio.git
+[submodule "gr-osmosdr/gr-osmosdr"]
+	path = gr-osmosdr/gr-osmosdr
+	url = git://git.osmocom.org/gr-osmosdr
+[submodule "hercules/hercules"]
+	path = hercules/hercules
+	url = git://github.com/rbowler/spinhawk.git
+[submodule "rtl-sdr/rtl-sdr"]
+	path = rtl-sdr/rtl-sdr
+	url = git://git.osmocom.org/rtl-sdr.git
+[submodule "scala/scala"]
+	path = scala/scala
+	url = git://github.com/scala/scala.git
+[submodule "scala/scala-dist"]
+	path = scala/scala-dist
+	url = git://github.com/scala/scala-dist.git
