@@ -5,11 +5,11 @@
 # Written by () ()
 
 PRGNAM=retroshare
-VERSION=${VERSION:-svn}
+VERSION=${VERSION:-"svn"}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 CORES=${CORES:-2}
-$MODE=${MODE:-} #use gui or nogui to select one but not the other
+MODE=${MODE:-gui} #use gui or nogui to select one but not the other
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then

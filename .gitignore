@@ -20,5 +20,6 @@ pianobar/pianobar-new
 pianobar/pianobar-old
 pianobar/pianobar
 schroot/schroot*.tar.xz
-fltk13/fltk-1.3.2-source.tar.gz
 fldigi/fldigi-err.log
+perl-gtk2/
+retroshare/retroshare-svn/
