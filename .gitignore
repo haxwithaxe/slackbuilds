@@ -23,3 +23,6 @@ schroot/schroot*.tar.xz
 fldigi/fldigi-err.log
 perl-gtk2/
 retroshare/retroshare-svn/
+distribute/distribute-*.tar.gz
+scala/scala-*.tgz
+*~

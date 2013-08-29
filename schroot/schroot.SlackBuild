@@ -25,9 +25,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=schroot
-VERSION=${VERSION:-1.6.5}
-BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
+VERSION=${VERSION:-1.7.0}
+BUILD=${BUILD:-3}
+TAG=${TAG:-ponce}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -74,10 +74,11 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-patch -p1 < $CWD/pam_misc.diff
+#patch -p1 < $CWD/pam_misc.diff
 
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
+
+CFLAGS="$SLKCFLAGS -std=c99" \
+CXXFLAGS="$SLKCFLAGS -std=c++11" \
 ./configure \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
