@@ -25,4 +25,5 @@ perl-gtk2/
 retroshare/retroshare-svn/
 distribute/distribute-*.tar.gz
 scala/scala-*.tgz
+apache-ivy/apache-ivy-*-bin.tar.gz
 *~
