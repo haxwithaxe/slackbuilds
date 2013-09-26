@@ -19,3 +19,6 @@
 [submodule "scala/scala-dist"]
 	path = scala/scala-dist
 	url = git://github.com/scala/scala-dist.git
+[submodule "pcb/pcb-git"]
+	path = pcb/pcb-git
+	url = git://git.geda-project.org/pcb.git
