@@ -7,7 +7,7 @@
 # Public domain.
 
 PRGNAM=scala
-VERSION=${VERSION:-v2.10.2}
+VERSION=${VERSION:-2.10.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_hax}
 
@@ -39,7 +39,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-get_from_dir
+tar zxvf $CWD/$PRGNAM-$VERSION.tgz $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
