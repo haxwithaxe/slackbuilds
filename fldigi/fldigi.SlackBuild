@@ -51,11 +51,14 @@ fi
 
 set -e
 
+echo Get Source ...
 cd $CWD/$PRGNAM
 git clean -dxf
-git pull
+git checkout master
+git pull -f
 cd $CWD
 
+echo Make The Build Env Clean ...
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
@@ -69,7 +72,10 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-autoreconf -i 2>&1 > $CWD/fldigi-err.log
+echo Autoreconf ...
+autoreconf -i
+
+echo Configuring ...
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -79,11 +85,15 @@ CXXFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
   --build=$ARCH-slackware-linux \
-  --without-asciidoc 2>&1 >> $CWD/fldigi-err.log
+  --without-asciidoc
 
-make 2>&1 >> $CWD/fldigi-err.log
-make install DESTDIR=$PKG 2>&1 >> $CWD/fldigi-err.log
+echo Make ...
+make
 
+echo Make Install ...
+make install DESTDIR=$PKG
+
+echo Package ...
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
