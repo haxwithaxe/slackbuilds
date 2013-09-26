@@ -1,15 +1,14 @@
 #!/bin/sh
 
-# Slackware build script for <retroshare>
+# Slackware build script for <appname>
 
-# Written by () ()
+# Written by haxwithaxe <me@haxwithaxe.net>
 
-PRGNAM=retroshare
-VERSION=${VERSION:-"svn"}
+PRGNAM="ax25-lib"
+SRCNAM="libax25"
+VERSION=${VERSION:-0.0.12-rc4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
-CORES=${CORES:-2}
-MODE=${MODE:-gui} #use gui or nogui to select one but not the other
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -42,14 +41,12 @@ fi
 
 set -e # Exit on most errors
 
-. ./get_source.sh
-
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
-mkdir -p $TMP/usr/{bin,share}
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-cp -a $CWD/$PRGNAM-$VERSION .
+tar xvf $CWD/$SRCNAM-$VERSION.tar.xz
+mv $SRCNAM-$VERSION $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -58,75 +55,56 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --mandir=/usr/man \
+  --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --build=$ARCH-slackware-linux
 
 # Compile the application and install it into the $PKG directory
-build_gui(){
-	for d in libbitdht openpgpsdk libretroshare retroshare-gui ;do
-		cd $d/src
-		qmake
-		make clean
-		make -j$CORES
-		cd ../..
-	done
-}
+make
+make install DESTDIR=$PKG
 
-build_nogui(){
-	cd rsctrl/src
-	make -j$CORES
-	cd -
-	cd retroshare-nogui/src
-	qmake && make clean && make -j$CORES
-	cd -
-}
+# Strip binaries and libraries - this can be done with 'make install-strip'
+# in many source trees, and that's usually acceptable if so, but if not,
+# use this:
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-build_all(){
-	build_gui
-	build_nogui
-}
+# Compress man pages
+# If the man pages are installed to /usr/share/man instead, you'll need to either
+# add the --mandir=/usr/man flag to configure or move them manually after the
+# make install process is run.
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
-# "install" retroshare from svn
-install_any(){
-	mkdir -p $PKG/opt/$PRGNAM
-	cp -a $TMP/$PRGNAM-$VERSION/* $PKG/opt/$PRGNAM/
-	mkdir -p $PKG/usr/bin
-}
+# Compress info pages and remove the package's dir file
+# If no info pages are installed by the software, don't leave this in the script
+rm -f $PKG/usr/info/dir
+#gzip -9 $PKG/usr/info/*.info*
 
-install_gui(){
-	ln -s /opt/$PRGNAM/retroshare-gui/src/RetroShare $PKG/usr/bin/retroshare-gui
-}
-
-install_nogui(){
-	ln -s /opt/$PRGNAM/retroshare-nogui/src/retroshare-nogui $PKG/usr/bin/retroshare-nogui
-}
-
-install_all(){
-	install_gui
-	install_nogui
-}
-
-case "$MODE" in
-    "gui")
-        build_gui
-        install_gui
-        MODE="-$MODE"
-        ;;
-    "nogui")
-        build_nogui
-        install_nogui
-        MODE="-$MODE"
-        ;;
-    *)
-        build_all
-        install_all
-        MODE=""
-        ;;
-esac
+# Remove perllocal.pod and other special files that don't need to be installed,
+# as they will overwrite what's already on the system.  If this is not needed,
+# remove it from the script.
+# Remove 'special' files
+find $PKG -name perllocal.pod \
+  -o -name ".packlist" \
+  -o -name "*.bs" \
+  | xargs rm -f
 
 # Copy program documentation into the package
 # The included documentation varies from one application to another, so be sure
 # to adjust your script as needed
 # Also, include the SlackBuild script in the documentation directory
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+#cp -a \
+#  <documentation> \
+#  $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # Copy the slack-desc (and a custom doinst.sh if necessary) into ./install
@@ -139,4 +117,4 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 # your custom contents of doinst.sh runs, then add the -p switch to
 # the makepkg command below -- see makepkg(8) for details
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM$MODE-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

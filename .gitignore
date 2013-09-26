@@ -27,4 +27,11 @@ distribute/distribute-*.tar.gz
 scala/scala-*.tgz
 apache-ivy/apache-ivy-*-bin.tar.gz
 chirp/chirp.hg
+ax25-apps/*.tar.xz
+ax25-lib/*.tar.xz
+ax25-tools/*.tar.xz
+xastir/xastir-*.tar.gz
+xastir/xastir-*/*
+ax25-lib/libax25-*/*
+ax25-tools/ax25-tools-*/*
 *~

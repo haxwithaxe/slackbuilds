@@ -42,12 +42,14 @@ export PYTHONPATH=/usr/lib$LIBDIRSUFFIX/python$PYVER/site-packages
 
 set -e # Exit on most errors
 
+. ../sbhelper.sh
+
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
 #tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cp -r $CWD/$PRGNAM $PRGNAM-$VERSION
+copy_git_submodule $CWD/$PRGNAM $TMP/$PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \

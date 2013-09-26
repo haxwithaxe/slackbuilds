@@ -1,24 +1,10 @@
 #!/bin/sh
 # Slackbuild for fldigi
-# Written by JK Wood joshuakwood@gmail.com
-# modified by haxwithaxe <me AT haxwithaxe.net>
-
-# Slackbuild is released under the Dog-on-Fire License:
-# If use of this script causes your dog to catch on fire,
-# you agree to send me five dollars.  Or a picture
-# of the dog on fire.
-# Otherwise, you're on your own.  I've tested the script
-# on my own computer, and it hasn't broken anything.
-# So if it does it on your computer, that falls in
-# the realm of "Not my problem."
-#
-# Of course, if you'll send a bug report to the above
-# email address, I may be able to see what you did
-# wrong and prevent it from happening in the future.
-# In which case, I may just send YOU five dollars.
 
 PRGNAM=fldigi
-VERSION=${VERSION:-git}
+GITREMOTE=${GITREMOTE:-"git://git.berlios.de/fldigi"}
+GITBRANCH=${GITBRANCH:-"master"}
+VERSION=${VERSION:-"git.$GITBRANCH"}
 BUILD=${BUILD:-1}
 TAG=${TAG:_SBo}
 
@@ -49,13 +35,19 @@ else
   LIBDIRSUFFIX=""
 fi
 
+# cause fltk 1.1 lives where we would normally find 1.3
+SLKCFLAGS="$SLKCFLAGS -I/usr/include/fltk13 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT"
+SLKCXXFLAGS="$SLKCFLAGS -I/usr/include/fltk13 -I/usr/include/freetype2 -O2 -fPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT"
+SLKLDFLAGS="-L/usr/lib64/fltk13 -Wl,-rpath,/usr/lib64/fltk13 -lfltk_images -lpng -lz -ljpeg -lfltk_forms -lfltk -lXext -lXft -lfontconfig -lXinerama -lpthread -ldl -lm -lX11"
+
 set -e
 
-cd $CWD/$PRGNAM
-git clean -dxf
-git pull
-cd $CWD
+echo Get Source ...
+. ../sbhelper.sh
 
+get_with_git
+
+echo Make The Build Env Clean ...
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
@@ -68,10 +60,16 @@ find . \
  -exec chmod 755 {} \; -o  \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
+echo autoreconf
+autoreconf -i
 
-autoreconf -i 2>&1 > $CWD/fldigi-err.log
+echo Autoreconf ...
+autoreconf -i
+
+echo Configuring ...
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
+LDFLAGS="$SLKLDFLAGS" \
 ./configure \
   --prefix=/usr \
   --sysconfdir=/etc \
@@ -79,11 +77,15 @@ CXXFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
   --build=$ARCH-slackware-linux \
-  --without-asciidoc 2>&1 >> $CWD/fldigi-err.log
+  --without-asciidoc
 
-make 2>&1 >> $CWD/fldigi-err.log
-make install DESTDIR=$PKG 2>&1 >> $CWD/fldigi-err.log
+echo Make ...
+make
 
+echo Make Install ...
+make install DESTDIR=$PKG
+
+echo Package ...
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
