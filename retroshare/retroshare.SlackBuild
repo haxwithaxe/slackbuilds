@@ -46,6 +46,7 @@ set -e # Exit on most errors
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
+mkdir -p $TMP/usr/{bin,share}
 cd $TMP
 rm -rf $PRGNAM-$VERSION
 cp -a $CWD/$PRGNAM-$VERSION .
