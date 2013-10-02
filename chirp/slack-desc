@@ -6,14 +6,14 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
 %prgnam_len%|-----handy-ruler------------------------------------------------------|
-%prgnam%: %prgnam% (short description of app)
-%prgnam%: Long description 71 wide characters by 11 lines tall
-%prgnam%:
-%prgnam%:
-%prgnam%:
-%prgnam%:
-%prgnam%:
-%prgnam%:
-%prgnam%:
-%prgnam%:
-%prgnam%:
+chirp: chirp (short description of app)
+chirp: Long description 71 wide characters by 11 lines tall
+chirp:
+chirp:
+chirp:
+chirp:
+chirp:
+chirp:
+chirp:
+chirp:
+chirp:
