@@ -92,10 +92,12 @@ install_any(){
 }
 
 install_gui(){
+	install_any
 	ln -s /opt/$PRGNAM/retroshare-gui/src/RetroShare $PKG/usr/bin/retroshare-gui
 }
 
 install_nogui(){
+	install_any
 	ln -s /opt/$PRGNAM/retroshare-nogui/src/retroshare-nogui $PKG/usr/bin/retroshare-nogui
 }
 
