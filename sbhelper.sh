@@ -12,6 +12,16 @@ get_with_git(){
 	get_from_dir $CWD/$PRGNAM
 }
 
+get_with_svn(){
+	if [ ! -d $CWD/$PRGNAM ] ;then
+        svn checkout $DOWNLOAD $CWD/$PRGNAM
+    fi
+    cd $CWD/$PRGNAM
+    svn update
+    cd -
+    get_from_dir $CWD/$PRGNAM
+}
+
 get_from_url(){
 	SRCURL=${SRCURL:-$1}
 	SRCEXT=${SRCEXT:-$2}
