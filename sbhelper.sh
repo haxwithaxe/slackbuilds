@@ -23,6 +23,16 @@ get_with_hg(){
 	hg update -c $BRANCH
 	hg pull -u
 	cd -
+	get_from_dir $CWD/$PRGNAM
+}
+
+get_with_svn(){
+	if [ ! -d $CWD/$PRGNAM ] ;then
+        svn checkout $DOWNLOAD $CWD/$PRGNAM
+    fi
+    cd $CWD/$PRGNAM
+    svn update
+    cd -
     get_from_dir $CWD/$PRGNAM
 }
 
