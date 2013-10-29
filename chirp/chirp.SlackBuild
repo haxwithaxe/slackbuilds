@@ -4,10 +4,11 @@
 
 # Written by (haxwithaxe) (me@haxwithaxe.net)
 
-PRGNAM=chirp			# replace with name of program
-VERSION=${VERSION:-hg}	# replace with version of program
-BUILD=${BUILD:-1}
+PRGNAM=chirp
+VERSION=${VERSION:-hg}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}		# the "_SBo" is required
+BRANCH="default"
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -38,6 +39,9 @@ else
   LIBDIRSUFFIX=""
 fi
 
+. ./chirp.info
+. ../sbhelper.sh
+
 set -e 
 
 rm -rf $PKG
@@ -45,7 +49,8 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
 #tar zxvf $CWD/$PRGNAM-$VERSION
-cp -a $CWD/$PRGNAM.$VERSION $PRGNAM-$VERSION
+get_with_hg
+#cp -a $CWD/$PRGNAM.$VERSION $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \

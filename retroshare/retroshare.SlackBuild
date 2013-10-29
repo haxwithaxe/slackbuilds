@@ -2,11 +2,11 @@
 
 # Slackware build script for <retroshare>
 
-# Written by () ()
+# Written by haxwithaxe me@haxwithaxe.net
 
 PRGNAM=retroshare
 VERSION=${VERSION:-"svn"}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-5}
 TAG=${TAG:-_SBo}
 CORES=${CORES:-2}
 MODE=${MODE:-gui} #use gui or nogui to select one but not the other
@@ -60,23 +60,32 @@ find . \
 
 
 # Compile the application and install it into the $PKG directory
+build_part(){
+    cd $1
+    qmake
+    make clean
+    make -j$CORES
+    cd $2
+}
+
+build_plugins(){
+    build_part plugins .
+}
+
 build_gui(){
 	for d in libbitdht openpgpsdk libretroshare retroshare-gui ;do
-		cd $d/src
-		qmake
-		make clean
-		make -j$CORES
-		cd ../..
+		build_part $d/src `pwd`
 	done
 }
 
 build_nogui(){
-	cd rsctrl/src
-	make -j$CORES
-	cd -
-	cd retroshare-nogui/src
-	qmake && make clean && make -j$CORES
-	cd -
+	for d in rsctrl retroshare-nogui ;do
+		build_part $d/src `pwd`
+    done
+}
+
+build_plugins(){
+	build_part plugins `pwd`
 }
 
 build_all(){
@@ -86,16 +95,20 @@ build_all(){
 
 # "install" retroshare from svn
 install_any(){
+	mkdir -p $PKG/usr/lib/retroshare/extensions
+	mv $TMP/$PRGNAM-$VERSION/plugins/*/*.so* $PKG/usr/lib/retroshare/extensions/
 	mkdir -p $PKG/opt/$PRGNAM
 	cp -a $TMP/$PRGNAM-$VERSION/* $PKG/opt/$PRGNAM/
 	mkdir -p $PKG/usr/bin
 }
 
 install_gui(){
+	install_any
 	ln -s /opt/$PRGNAM/retroshare-gui/src/RetroShare $PKG/usr/bin/retroshare-gui
 }
 
 install_nogui(){
+	install_any
 	ln -s /opt/$PRGNAM/retroshare-nogui/src/retroshare-nogui $PKG/usr/bin/retroshare-nogui
 }
 
@@ -107,16 +120,19 @@ install_all(){
 case "$MODE" in
     "gui")
         build_gui
+		build_plugins
         install_gui
         MODE="-$MODE"
         ;;
     "nogui")
         build_nogui
+		build_plugins
         install_nogui
         MODE="-$MODE"
         ;;
     *)
         build_all
+		build_plugins
         install_all
         MODE=""
         ;;

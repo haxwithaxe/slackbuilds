@@ -1,5 +1,7 @@
 #!/bin/bash
 
+gitroot=$(dirname $0)
+
 get_with_git(){
 	if [ ! -d $CWD/$PRGNAM ] ;then
 		git clone $GITREMOTE $CWD/$PRGNAM
@@ -8,6 +10,18 @@ get_with_git(){
 	git clean -dxf
 	git checkout $GITBRANCH
 	git pull
+	cd -
+	get_from_dir $CWD/$PRGNAM
+}
+
+get_with_hg(){
+	if [ ! -d $CWD/$PRGNAM ] ;then
+		hg clone $DOWNLOAD $CWD/$PRGNAM
+	fi
+	cd $CWD/$PRGNAM
+	if ! hg status -un ;then hg status -un | xargs rm ;fi
+	hg update -c $BRANCH
+	hg pull -u
 	cd -
 	get_from_dir $CWD/$PRGNAM
 }
@@ -23,6 +37,7 @@ get_with_svn(){
 }
 
 get_from_url(){
+	#FIXME handle multiple urls
 	SRCURL=${SRCURL:-$1}
 	SRCEXT=${SRCEXT:-$2}
     if [ ! -e $PRGNAM-$VERSION${SRCEXT} ] ;then
@@ -83,7 +98,7 @@ make_real_git(){
 	mv $submodule/.git $submodule/.git.submodule
 	mkdir -p $submodule/.git
 	touch $submodule/.git/config
-	$submodule/.git/config <<EOF
+	cat - > $submodule/.git/config <<EOF
 [core]
 	repositoryformatversion = 0
 	filemode = true
@@ -101,7 +116,8 @@ EOF
 copy_git_submodule(){
 	submodule=$1
 	submodule_copy=$2
+	gitroot=${GITROOT:-".."}
 	cp -a $submodule $submodule_copy
-	make_real_git $gitroot/.gitmodules $name $submodule_copy
+	make_real_git $gitroot/.gitmodules $submodule $submodule_copy
 }
 
