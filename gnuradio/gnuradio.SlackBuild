@@ -4,7 +4,9 @@
 
 # Written by haxwithaxe (me@haxwithaxe.net)
 
+
 PRGNAM=gnuradio
+. ./${PRGNAM}.info
 VERSION=${VERSION:-git}
 PYVER=2.7
 BUILD=${BUILD:-1}
@@ -49,7 +51,7 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
 #tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-copy_git_submodule $CWD/$PRGNAM $TMP/$PRGNAM-$VERSION
+get_with_git
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -60,7 +62,7 @@ find . \
 
 mkdir -p build
 cd build
-  cmake \
+cmake \
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -69,9 +71,10 @@ cd build
 	-DPYTHON_INCLUDE_DIR=/usr/include/python$PYVER \
 	-DPYTHON_LIBRARY=/usr/lib$LIBDIRSUFFIX/libpython$PYVER.so \
     -DMAN_INSTALL_DIR=/usr/man \
-    -DCMAKE_BUILD_TYPE=Release ..
-  make 
-  make install DESTDIR=$PKG
+    -DCMAKE_BUILD_TYPE=Release \
+	-Wno-dev ..
+make 
+make install DESTDIR=$PKG
 cd ..
 
 # Strip binaries and libraries - this can be done with 'make install-strip'

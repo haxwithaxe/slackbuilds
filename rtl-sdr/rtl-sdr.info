@@ -1,5 +1,5 @@
 PRGNAM="rtl-sdr"
-VERSION="git"
+VERSION="git-master"
 HOMEPAGE="http://sdr.osmocom.org/trac/wiki/rtl-sdr"
 DOWNLOAD="git://git.osmocom.org/rtl-sdr.git"
 MD5SUM=""

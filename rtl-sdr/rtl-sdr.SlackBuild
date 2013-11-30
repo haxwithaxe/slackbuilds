@@ -8,6 +8,7 @@ PRGNAM=rtl-sdr
 VERSION=${VERSION:-git}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_hax}
+BRANCH=${BRANCH:-master}
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -39,6 +40,8 @@ else
 fi
 
 cd $CWD/$PRGNAM
+git clean -dxf
+git checkout $BRANCH
 git pull
 cd -
 
@@ -65,7 +68,7 @@ cd build
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DLIB_SUFFIX=${LIBDIRSUFFIX} \
+    -DLIB_INSTALL_DIR=lib${LIBDIRSUFFIX} \
     -DMAN_INSTALL_DIR=/usr/man \
     -DCMAKE_BUILD_TYPE=Release ..
   make 

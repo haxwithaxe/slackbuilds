@@ -1,11 +1,13 @@
 #!/bin/sh
 
-# Slackware build script for <gr-osmosdr>
+# Slackware build script for <gqrx>
 
-PRGNAM=gr-osmosdr
-VERSION=${VERSION:-git}
+# Written by (haxwithaxe) <me@haxwithaxe.net>
+
+PRGNAM=gqrx
+VERSION=${VERSION:-"git-master"}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_hax}
+TAG=${TAG:-_SBo}		# the "_SBo" is required
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -36,14 +38,15 @@ else
   LIBDIRSUFFIX=""
 fi
 
-set -e # Exit on most errors
+set -xe # Exit on most errors
+
 . ./${PRGNAM}.info
 . ../sbhelper.sh
+
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-#tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 get_with_git
 cd $PRGNAM-$VERSION
 chown -R root:root .
@@ -53,19 +56,17 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-# Build
-ldconfig # just in case someone else forgot to
 mkdir -p build
 cd build
-  cmake \
-    -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
-    -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DLIB_SUFFIX=${LIBDIRSUFFIX} \
-    -DCMAKE_BUILD_TYPE=Release \
-	..
-  make 
-  make install DESTDIR=$PKG
+
+QMAKE_CFLAGS=$SLKCFLAGS \
+QMAKE_CXXFLAGS=$SLKCFLAGS \
+PREFIX=/usr \
+LIB_SUFFIX=${LIBDIRSUFFIX} \
+qmake ..
+
+make
+make install DESTDIR=$PKG
 cd ..
 
 # Strip binaries and libraries - this can be done with 'make install-strip'
@@ -76,13 +77,17 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 # Compress man pages
 # If the man pages are installed to /usr/share/man instead, you'll need to 
 # move them manually.
-#find $PKG/usr/man -type f -exec gzip -9 {} \;
-#for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+if [ -e $PKG/usr/man ] ;then
+	find $PKG/usr/man -type f -exec gzip -9 {} \;
+	for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+fi
 
 # Compress info pages and remove the package's dir file
 # If no info pages are installed by the software, don't leave this in the script
-#rm -f $PKG/usr/info/dir
-#gzip -9 $PKG/usr/info/*.info*
+if [ -e $PKG/usr/info/dir ] ;then
+rm -f $PKG/usr/info/dir
+gzip -9 $PKG/usr/info/*.info*
+fi
 
 # Remove perllocal.pod and other special files that don't need to be installed,
 # as they will overwrite what's already on the system.  If this is not needed,
@@ -94,6 +99,7 @@ find $PKG -name perllocal.pod -o -name ".packlist" -o -name "*.bs" | xargs rm -f
 # to adjust your script as needed
 # Also, include the SlackBuild script in the documentation directory
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+#  $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # Copy the slack-desc (and a custom doinst.sh if necessary) into ./install
