@@ -4,12 +4,12 @@ gitroot=$(dirname $0)
 
 get_with_git(){
 	if [ ! -d $CWD/$PRGNAM ] ;then
-		git clone $GITREMOTE $CWD/$PRGNAM
+		git clone $DOWNLOAD $CWD/$PRGNAM
 	fi
 	cd $CWD/$PRGNAM
 	git clean -dxf
-	git checkout $GITBRANCH
-	git pull
+	git checkout $MD5SUM
+	git pull origin $MD5SUM
 	cd -
 	get_from_dir $CWD/$PRGNAM
 }
