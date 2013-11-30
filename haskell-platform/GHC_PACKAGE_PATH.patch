@@ -1,0 +1,16 @@
+diff -ruNp haskell-platform-old/scripts/build.sh haskell-platform-new/scripts/build.sh
+--- haskell-platform-old/scripts/build.sh	2013-05-04 16:56:20.000000000 -0400
++++ haskell-platform-new/scripts/build.sh	2013-11-28 00:41:26.339533801 -0500
+@@ -66,9 +66,9 @@ build_pkg () {
+ 
+   [ -f Setup ] && rm Setup
+ 
+-  GHC_PACKAGE_PATH="${ORIG_GHC_PACKAGE_PATH}" \
+-    tell ${GHC} --make Setup -o Setup -package "${CABAL_PKG_VER}" \
+-    || die "Compiling the Setup script failed"
++#  GHC_PACKAGE_PATH="${ORIG_GHC_PACKAGE_PATH}" \
++   tell ${GHC} --make Setup -o Setup -package "${CABAL_PKG_VER}" \
++   || die "Compiling the Setup script failed"
+   [ -x Setup ] || die "The Setup script does not exist or cannot be run"
+ 
+   if [ -x ../${HAPPY_INPLACE} ]; then
