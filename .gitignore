@@ -45,3 +45,5 @@ openscad/openscad-*/
 openscad/openscad-*.tar.*
 gqrx/gqrx
 OpenCASCADE/OpenCASCADE652.tar.gz
+chirp/chirp
+fftw3/fftw3
