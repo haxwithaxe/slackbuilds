@@ -116,12 +116,12 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 # Some files are to be manually renamed so they do not conflict with fltk(1.1.x)'s ones
 
 # Change some reference in man files
-#sed -i "s|fluid|fluid13|g" $PKG/usr/man/man[1,3]/*
-#sed -i "s|fltk|fltk13|g" $PKG/usr/man/man[1,3]/*
-#sed -i "s|www.fltk13.org|www.fltk.org|g" $PKG/usr/man/man[1,3]/*
+sed -i "s|fluid|fluid13|g" $PKG/usr/man/man[1,3]/*
+sed -i "s|fltk|fltk13|g" $PKG/usr/man/man[1,3]/*
+sed -i "s|www.fltk13.org|www.fltk.org|g" $PKG/usr/man/man[1,3]/*
 
-#find $PKG/usr/man -type f -exec gzip -9 {} \;
-#for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
 # Remove duplicate directories
 rm $PKG/usr/man/man1/fluid.1
