@@ -49,6 +49,7 @@ get_from_url(){
 get_from_arch(){
 	SRC_ARCHIVE=${SRC_ARCHIVE:-$1}
 	mime_type=`file --mime-type $SRC_ARCHIVE | sed 's/^[^:]*\:[[:space:]]//'`
+
 	case "$mime_type" in
 		"application/zip")
 			unzip ${SRC_ARCHIVE}
@@ -66,8 +67,8 @@ get_from_arch(){
 }
 
 get_from_dir(){
-	SRCDIR=${SRCDIR:-$1}
-	cp -r $SRCDIR $TMP/$PRGNAM-$VERSION
+	SRC_DIR=${SRC_DIR:-$1}
+	cp -r $SRC_DIR $TMP/$PRGNAM-$VERSION
 }
 
 make_real_git(){
