@@ -51,3 +51,4 @@ haskell-platform/haskell-platform.tar.gz
 smc/smc*.tar.?z*
 xbmc/*.tar.?z*
 xbmc/*.t?z
+FreeCAD/*.tar.?z*
