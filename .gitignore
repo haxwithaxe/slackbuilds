@@ -49,3 +49,5 @@ chirp/chirp
 fftw3/fftw3
 haskell-platform/haskell-platform.tar.gz
 smc/smc*.tar.?z*
+xbmc/*.tar.?z*
+xbmc/*.t?z
