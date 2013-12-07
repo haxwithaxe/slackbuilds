@@ -1,0 +1,7 @@
+WSJTX
+amatuer radio digital mode HF.
+
+requires: qt5, (optional) qtchooser
+
+Qt5 slackbuild/notes:
+http://www.linuxquestions.org/questions/showthread.php?p=5075149#post5075149
